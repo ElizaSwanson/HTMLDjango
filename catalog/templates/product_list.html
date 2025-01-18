@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Список продуктов{% endblock %}
+
+{% block content %}
+<h2>Список продуктов</h2>
+<ul class="list-group">
+    {% for prods in products %}
+        <div class="container text-center  p-3  ">
+        <div class="row grid gap-3">
+            <div class="col border border-dark-subtle    rounded-2">
+                {{ prod.name}}
+                <div class="p-3"><h1>{{prod.purchase_price}}</h1></div>
+                <div class="p-3">{{prod.description}}</div>
+
+                <button type="button" class="btn btn-primary">Купить</button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</ul>
+{% endblock %}
+
