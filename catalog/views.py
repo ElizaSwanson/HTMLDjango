@@ -1,24 +1,44 @@
 from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse
 from catalog.models import Product
+from django.views.generic import ListView, View
 
 
-def home(request):
-    return render(request, 'home.html')
+class HomeView(ListView):
+    model = Product
+    template_name = 'home.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
 
 
-def contacts(request):
-    return render(request, 'contacts.html')
+class ContactsView(View):
+    template_name = 'contacts.html'
+
+    def get(self, request):
+        context = {"title": 'Контакты'}
+        return render(request, self.template_name, context)
+
+    def post(self, request):
+        name = request.POST.get('name')
+        message = request.POST.get('message')
+        return HttpResponse(f"Спасибо, {name}! Ваше сообщение получено.")
 
 
-def product_list(request):
-    products = Product.objects.all()
-    context = {'products': products}
-    return render(request, 'product_list.html', context)
+class ProductDetailsView(View):
+    template_name = 'product_details.html'
+
+    def get(self, request, pk):
+        product = get_object_or_404(Product, pk=pk)
+        context = {"product": product, "title": f"Товар №{pk}"}
+        return render(request, self.template_name, context)
 
 
-def product_detail(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    context = {'product': product}
-    return render(request, 'product_detail.html', context)
+class ProductListView(ListView):
+    model = Product
+    template_name = 'product_list.html'
+    context_object_name = 'products'
 
-
+    def get_queryset(self):
+        return Product.objects.all()
