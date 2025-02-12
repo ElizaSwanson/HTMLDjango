@@ -22,6 +22,7 @@ class Product(models.Model):
     created_at = models.DateTimeField(verbose_name='дата создания')
     updated_at = models.DateTimeField(verbose_name='дата последнего изменения')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
+    is_available = models.BooleanField(default=True, verbose_name='Доступность в каталоге')
 
     def __str__(self):
         return self.name
