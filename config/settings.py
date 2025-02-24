@@ -153,10 +153,12 @@ EMAIL_HOST_USER = 'iseeallstars@yandex.ru'
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-LOGIN_REDIRECT_URL = "/"
+AUTH_USER_MODEL = "users_list.Users"
 
-LOGOUT_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "catalog/product_list.html"
+
+LOGOUT_REDIRECT_URL = "catalog/product_list.html"
 
 LOGIN_URL = "login"
 
-AUTH_USER_MODEL = "users_list.Users"
+

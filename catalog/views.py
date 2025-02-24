@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from catalog.models import Product
@@ -37,19 +38,19 @@ class ProductListView(ListView):
     def get_queryset(self):
         return Product.objects.all()
 
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     template_name = 'product_form.html'
     success_url = reverse_lazy('catalog:product_list')
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
     template_name = 'product_form.html'
     success_url = reverse_lazy('catalog:product_list')
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     template_name = 'product_delete.html'
     success_url = reverse_lazy('catalog:product_list')
