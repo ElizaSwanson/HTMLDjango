@@ -183,12 +183,6 @@
                         data-bs-toggle="dropdown" aria-expanded="false">
                     Меню
                 </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <li><a class="dropdown-item" href="{% url 'catalog:product_list' %}">Каталог</a></li>
-                    <li><a class="dropdown-item" href="{% url 'catalog:product_create' %}">Создать товар</a></li>
-                    <li><a class="dropdown-item" href="{% url 'catalog:contacts' %}">Контакты</a></li>
-                    <li><a class="dropdown-item" href="{% url 'blog:post_list' %}">Блог</a></li>
-                </ul>
             </div>
             <form method="post" action="{% url 'users:logout' %}">
                 {% csrf_token %}
