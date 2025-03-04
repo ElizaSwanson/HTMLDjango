@@ -155,9 +155,9 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 AUTH_USER_MODEL = "users_list.Users"
 
-LOGIN_REDIRECT_URL = "catalog/product_list.html"
+LOGIN_REDIRECT_URL = "catalog:product_list"
 
-LOGOUT_REDIRECT_URL = "catalog/product_list.html"
+LOGOUT_REDIRECT_URL = "catalog:product_list"
 
 LOGIN_URL = "login"
 

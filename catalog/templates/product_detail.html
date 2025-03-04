@@ -15,8 +15,10 @@
               <p class="card-text">Дата создания: {{ product.created_at }}</p>
               <p class="card-text">Дата изменения: {{ product.updated_at }}</p>
               <div class="d-flex justify-content-between">
-                <a href="{% url 'catalog:product_edit' product.pk %}" class="btn btn-outline-warning btn-lg">Редактировать</a>
-                <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-outline-danger btn-lg">Удалить</a>
+                {% if request.user == product.owner or perms.catalog.can_unpublish_product %}
+                  <a href="{% url 'catalog:product_edit' product.pk %}" class="btn btn-outline-warning btn-lg">Редактировать</a>
+                  <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-outline-danger btn-lg">Удалить</a>
+                  {% endif %}
               </div>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">

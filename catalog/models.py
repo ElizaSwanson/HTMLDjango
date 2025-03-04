@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 
 class Category(models.Model):
@@ -23,6 +24,7 @@ class Product(models.Model):
     updated_at = models.DateTimeField(verbose_name='дата последнего изменения')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
     is_available = models.BooleanField(default=True, verbose_name='Доступность в каталоге')
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Владелец", related_name="products", null=True)
 
     def __str__(self):
         return self.name
@@ -31,3 +33,4 @@ class Product(models.Model):
         verbose_name = 'Продукт'
         verbose_name_plural = 'Продукты'
         ordering = ['name', 'price', 'created_at', 'category']
+        permissions = [("can_unpublish_product", "Может отменять публикацию продукта"),]
