@@ -2,10 +2,15 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
-from catalog.models import Product
+from catalog.models import Product, Category
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, FormView
 from .forms import ProductForm, ContactForm, ProductModeratorForm
 from django.urls import reverse_lazy
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
+from django.core.cache import cache
+
+from .services import get_products_from_cache
 
 
 class HomeView(ListView):
@@ -26,6 +31,7 @@ class ContactsView(DetailView):
         return super().form_valid(form)
 
 
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class ProductDetailsView(DetailView):
     model = Product
     template_name = 'product_detail.html'
@@ -37,7 +43,8 @@ class ProductListView(ListView):
     context_object_name = 'products'
 
     def get_queryset(self):
-        return Product.objects.all()
+        return get_products_from_cache
+
 
 class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
@@ -84,3 +91,20 @@ class ProductDeleteView(LoginRequiredMixin, DeleteView):
 
     def handle_no_permission(self):
         raise PermissionDenied
+
+
+class ProductByCategoryView(ListView):
+    model = Product
+    template_name = 'category_products.html'
+    context_object_name = 'products'
+    paginate_by = 3
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        category_id = self.kwargs.get('category_id')
+        context['category'] = Category.objects.get(id=category_id)
+        return context
+
+    def get_queryset(self):
+        category_id = self.kwargs.get('category_id')
+        return Product.objects.filter(category_id=category_id, is_available=True)
